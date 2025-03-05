@@ -3,6 +3,7 @@ package com.xzc.lease.web.admin.controller.apartment;
 
 import com.xzc.lease.common.result.Result;
 import com.xzc.lease.model.entity.LeaseTerm;
+import com.xzc.lease.web.admin.service.LeaseTermService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,12 @@ import java.util.List;
 @RestController
 public class LeaseTermController {
 
+    private LeaseTermService service;
     @GetMapping("list")
     @Operation(summary = "查询全部租期列表")
     public Result<List<LeaseTerm>> listLeaseTerm() {
-        return Result.ok();
+        List<LeaseTerm> list = service.list();
+        return Result.ok(list);
     }
 
     @PostMapping("saveOrUpdate")
