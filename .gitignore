@@ -9,6 +9,7 @@ target/
 .idea/compiler.xml
 .idea/libraries/
 .idea
+web/web-admin/src/main/resources/application.yml
 *.iws
 *.iml
 *.ipr
