@@ -1,6 +1,7 @@
 package com.xzc.lease.web.admin.controller.apartment;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xzc.lease.common.result.Result;
 import com.xzc.lease.model.entity.FeeKey;
 import com.xzc.lease.model.entity.FeeValue;
@@ -10,6 +11,7 @@ import com.xzc.lease.web.admin.vo.fee.FeeKeyVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,13 +51,19 @@ public class FeeController {
 
     @Operation(summary = "根据id删除杂费名称")
     @DeleteMapping("key/deleteById")
+    @Transactional
     public Result<?> deleteFeeKeyById(@RequestParam Long feeKeyId) {
+        feeKeyService.removeById(feeKeyId);
+        LambdaQueryWrapper<FeeValue> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(FeeValue::getFeeKeyId,feeKeyId);
+        feeValueService.remove(queryWrapper);
         return Result.ok();
     }
 
     @Operation(summary = "根据id删除杂费值")
     @DeleteMapping("value/deleteById")
     public Result<?> deleteFeeValueById(@RequestParam Long id) {
+        feeValueService.removeById(id);
         return Result.ok();
     }
 }
