@@ -1,6 +1,7 @@
 package com.xzc.lease.web.admin.controller.apartment;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xzc.lease.common.result.Result;
 import com.xzc.lease.model.entity.AttrKey;
 import com.xzc.lease.model.entity.AttrValue;
@@ -11,8 +12,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.beans.Transient;
 import java.util.List;
 
 
@@ -51,13 +54,20 @@ public class AttrController {
 
     @Operation(summary = "根据id删除属性名称")
     @DeleteMapping("key/deleteById")
+    @Transactional //添加事务管理
     public Result removeAttrKeyById(@RequestParam Long attrKeyId) {
+        keyService.removeById(attrKeyId);
+
+        LambdaQueryWrapper<AttrValue> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(AttrValue::getAttrKeyId,attrKeyId);
+        valueService.remove(queryWrapper);
         return Result.ok();
     }
 
     @Operation(summary = "根据id删除属性值")
     @DeleteMapping("value/deleteById")
     public Result removeAttrValueById(@RequestParam Long id) {
+        valueService.removeById(id);
         return Result.ok();
     }
 
