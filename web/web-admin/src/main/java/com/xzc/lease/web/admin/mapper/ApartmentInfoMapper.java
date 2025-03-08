@@ -1,7 +1,11 @@
 package com.xzc.lease.web.admin.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzc.lease.model.entity.ApartmentInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xzc.lease.web.admin.vo.apartment.ApartmentItemVo;
+import com.xzc.lease.web.admin.vo.apartment.ApartmentQueryVo;
 
 /**
 * @author liubo
@@ -11,6 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface ApartmentInfoMapper extends BaseMapper<ApartmentInfo> {
 
+    Page<ApartmentItemVo> pageItem(IPage<ApartmentItemVo> page, ApartmentQueryVo queryVo);
 }
 
 
