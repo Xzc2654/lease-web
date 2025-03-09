@@ -66,4 +66,27 @@
              on ai.id = cc.apartment_id
 
     </select>
+    <select id="selectApartmentInfoByRoomId" resultType="com.xzc.lease.model.entity.ApartmentInfo">
+        select id,
+               name,
+               introduction,
+               district_id,
+               district_name,
+               city_id,
+               city_name,
+               province_id,
+               province_name,
+               address_detail,
+               latitude,
+               longitude,
+               phone,
+               is_release
+        from apartment_info ai
+        where ai.is_deleted = 0
+          and ai.id = (select ri.apartment_id
+                       from room_info ri
+                       where ri.is_deleted = 0
+                         and ri.id = #{id})
+
+    </select>
 </mapper>

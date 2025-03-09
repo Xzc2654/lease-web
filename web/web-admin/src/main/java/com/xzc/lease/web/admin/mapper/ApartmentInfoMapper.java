@@ -16,6 +16,8 @@ import com.xzc.lease.web.admin.vo.apartment.ApartmentQueryVo;
 public interface ApartmentInfoMapper extends BaseMapper<ApartmentInfo> {
 
     Page<ApartmentItemVo> pageItem(IPage<ApartmentItemVo> page, ApartmentQueryVo queryVo);
+
+    ApartmentInfo selectApartmentInfoByRoomId(Long id);
 }
 
 
