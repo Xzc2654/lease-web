@@ -1,6 +1,7 @@
 package com.xzc.lease.web.admin.controller.login;
 
 
+import com.xzc.lease.common.context.LoginUserContext;
 import com.xzc.lease.common.result.Result;
 import com.xzc.lease.web.admin.service.LoginService;
 import com.xzc.lease.web.admin.vo.login.CaptchaVo;
@@ -36,7 +37,8 @@ public class LoginController {
     @Operation(summary = "获取登陆用户个人信息")
     @GetMapping("info")
     public Result<SystemUserInfoVo> info() {
-
-        return Result.ok();
+        Long userId = LoginUserContext.getLoginUser().getUserId();
+        SystemUserInfoVo userInfoVo = service.getLoginUserinfo(userId);
+        return Result.ok(userInfoVo);
     }
 }

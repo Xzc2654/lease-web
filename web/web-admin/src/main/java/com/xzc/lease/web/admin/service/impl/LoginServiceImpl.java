@@ -13,6 +13,7 @@ import com.xzc.lease.web.admin.mapper.SystemUserMapper;
 import com.xzc.lease.web.admin.service.LoginService;
 import com.xzc.lease.web.admin.vo.login.CaptchaVo;
 import com.xzc.lease.web.admin.vo.login.LoginVo;
+import com.xzc.lease.web.admin.vo.system.user.SystemUserInfoVo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -77,6 +78,15 @@ public class LoginServiceImpl implements LoginService {
         }
         //创建JWT，并响应给浏览器。
         return JWTUtil.createToken(systemUser.getId(),systemUser.getUsername());
+    }
+
+    @Override
+    public SystemUserInfoVo getLoginUserinfo(Long userId) {
+        SystemUserInfoVo userInfoVo = new SystemUserInfoVo();
+        SystemUser systemUser = mapper.selectById(userId);
+        userInfoVo.setName(systemUser.getUsername());
+        userInfoVo.setAvatarUrl(systemUser.getAvatarUrl());
+        return userInfoVo;
     }
 
 
