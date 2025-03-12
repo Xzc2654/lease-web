@@ -30,4 +30,21 @@
         </where>
 
     </select>
+    <select id="selectByLoginVo" resultType="com.xzc.lease.model.entity.SystemUser">
+        select id,
+               username,
+               password,
+               name,
+               type,
+               phone,
+               avatar_url,
+               additional_info,
+               post_id,
+               status
+        from system_user su
+        where su.is_deleted = 0
+          and su.username = #{username};
+    </select>
+
+
 </mapper>

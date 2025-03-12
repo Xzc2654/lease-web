@@ -2,6 +2,7 @@ package com.xzc.lease.web.admin.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzc.lease.model.entity.SystemUser;
+import com.xzc.lease.web.admin.vo.login.LoginVo;
 import com.xzc.lease.web.admin.vo.system.user.SystemUserItemVo;
 import com.xzc.lease.web.admin.vo.system.user.SystemUserQueryVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -16,6 +17,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 public interface SystemUserMapper extends BaseMapper<SystemUser> {
 
     IPage<SystemUserItemVo> pageSUSer(Page<SystemUserItemVo> systemUserItemVoPage, SystemUserQueryVo queryVo);
+
+
+    SystemUser selectByLoginVo(String username);
 }
 
 
