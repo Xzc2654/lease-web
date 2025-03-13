@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface ProvinceInfoMapper extends BaseMapper<ProvinceInfo> {
 
+    String selectPNameByID(Long provinceId);
 }
 
 

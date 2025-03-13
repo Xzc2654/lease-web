@@ -4,4 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzc.lease.web.admin.mapper.CityInfoMapper">
 
+    <select id="selectPNameByID" resultType="java.lang.String">
+        select name
+        from city_info
+        where id = #{cityId}
+    </select>
 </mapper>

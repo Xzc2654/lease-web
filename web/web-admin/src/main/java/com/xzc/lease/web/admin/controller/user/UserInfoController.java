@@ -30,7 +30,7 @@ public class UserInfoController {
         LambdaQueryWrapper<UserInfo> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(queryVo.getPhone() != null,UserInfo::getPhone,queryVo.getPhone());
         queryWrapper.eq(queryVo.getStatus() != null,UserInfo::getStatus,queryVo.getStatus());
-        IPage<UserInfo> result = service.page(userInfoPage);
+        IPage<UserInfo> result = service.page(userInfoPage,queryWrapper);
         return Result.ok(result);
     }
 

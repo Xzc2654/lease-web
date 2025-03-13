@@ -57,6 +57,12 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
     private FeeValueMapper feeValueMapper;
     @Autowired
     private RoomInfoMapper roomInfoMapper;
+    @Autowired
+    private ProvinceInfoMapper provinceInfoMapper;
+    @Autowired
+    private CityInfoMapper cityInfoMapper;
+    @Autowired
+    private DistrictInfoMapper districtInfoMapper;
 
     @Override
     public Page<ApartmentItemVo> pageItem(IPage<ApartmentItemVo> page, ApartmentQueryVo queryVo) {
@@ -65,14 +71,17 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
 
     @Override
     public void saveOrUpdateApartment(ApartmentSubmitVo apartmentSubmitVo) {
+        apartmentSubmitVo.setProvinceName(provinceInfoMapper.selectPNameByID(apartmentSubmitVo.getProvinceId()));
+        apartmentSubmitVo.setCityName(cityInfoMapper.selectPNameByID(apartmentSubmitVo.getCityId()));
+        apartmentSubmitVo.setDistrictName(districtInfoMapper.selectPNameByID(apartmentSubmitVo.getDistrictId()));
         boolean isUpdate = apartmentSubmitVo.getId() != null;
         super.saveOrUpdate(apartmentSubmitVo);
 
         if (isUpdate){
             //1.删除图片列表
             LambdaQueryWrapper<GraphInfo> graphQueryWrapper = new LambdaQueryWrapper<>();
-            graphQueryWrapper.eq(GraphInfo::getItemId, ItemType.APARTMENT);
-            graphQueryWrapper.eq(GraphInfo::getId,apartmentSubmitVo.getId());
+            graphQueryWrapper.eq(GraphInfo::getItemType, ItemType.APARTMENT);
+            graphQueryWrapper.eq(GraphInfo::getItemId,apartmentSubmitVo.getId());
             graphInfoService.remove(graphQueryWrapper);
             //2.删除配套列表
             LambdaQueryWrapper<ApartmentFacility> apartmentFacilityQueryWrapper = new LambdaQueryWrapper<>();

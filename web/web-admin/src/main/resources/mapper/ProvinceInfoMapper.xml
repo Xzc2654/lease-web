@@ -4,4 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzc.lease.web.admin.mapper.ProvinceInfoMapper">
 
+    <select id="selectPNameByID" resultType="java.lang.String">
+        select
+            name
+        from province_info
+        where id=#{provinceId}
+    </select>
 </mapper>

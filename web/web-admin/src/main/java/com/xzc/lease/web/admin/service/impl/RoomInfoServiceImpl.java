@@ -78,8 +78,8 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 
             //1.删除"图片列表"
             LambdaQueryWrapper<GraphInfo> graphInfoWrapper = new LambdaQueryWrapper<>();
-            graphInfoWrapper.eq(GraphInfo::getItemId, ItemType.ROOM);
-            graphInfoWrapper.eq(GraphInfo::getId,roomSubmitVo.getId());
+            graphInfoWrapper.eq(GraphInfo::getItemType, ItemType.ROOM);
+            graphInfoWrapper.eq(GraphInfo::getItemId,roomSubmitVo.getId());
             graphInfoService.remove(graphInfoWrapper);
             //2.删除"属性信息列表"
             LambdaQueryWrapper<RoomAttrValue> roomAttrValueWrapper = new LambdaQueryWrapper<>();
