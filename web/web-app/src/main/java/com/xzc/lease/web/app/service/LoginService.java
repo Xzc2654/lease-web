@@ -6,4 +6,5 @@ import com.xzc.lease.web.app.vo.user.UserInfoVo;
 public interface LoginService {
 
 
+    void getSMSCode(String phone);
 }
