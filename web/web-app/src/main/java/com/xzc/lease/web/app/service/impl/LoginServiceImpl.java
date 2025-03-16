@@ -1,13 +1,21 @@
 package com.xzc.lease.web.app.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xzc.lease.common.constant.RedisConstant;
 import com.xzc.lease.common.exception.LeaseException;
 import com.xzc.lease.common.result.ResultCodeEnum;
+import com.xzc.lease.common.utils.JWTUtil;
 import com.xzc.lease.common.utils.VerifyCodeUtil;
+import com.xzc.lease.model.entity.UserInfo;
+import com.xzc.lease.model.enums.BaseStatus;
 import com.xzc.lease.web.app.service.LoginService;
 import com.xzc.lease.web.app.service.SmsService;
+import com.xzc.lease.web.app.service.UserInfoService;
+import com.xzc.lease.web.app.vo.user.LoginVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -17,14 +25,15 @@ import java.util.concurrent.TimeUnit;
 public class LoginServiceImpl implements LoginService {
 
 
-    private final SmsService smsService;
-    private final RedisTemplate<Object, Object> redisTemplate;
+    @Autowired
+    private  SmsService smsService;
 
-    public LoginServiceImpl(SmsService smsService, RedisTemplate<Object, Object> redisTemplate) {
-        this.smsService = smsService;
-        this.redisTemplate = redisTemplate;
-    }
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
+
+    @Autowired
+    private UserInfoService userInfoService;
     @Override
     public void getSMSCode(String phone) {
         //1. 检查手机号码是否为空
@@ -35,7 +44,7 @@ public class LoginServiceImpl implements LoginService {
         String key = RedisConstant.APP_LOGIN_PREFIX + phone;
         Boolean hasKey = redisTemplate.hasKey(key);
         if (hasKey){
-            Long expire = redisTemplate.getExpire(key);
+            Long expire = redisTemplate.getExpire(key,TimeUnit.SECONDS);
             if (RedisConstant.APP_LOGIN_CODE_TTL_SEC - expire < RedisConstant.APP_LOGIN_CODE_RESEND_TIME_SEC){
                 throw new LeaseException(ResultCodeEnum.APP_SEND_SMS_TOO_OFTEN);
             }
@@ -44,6 +53,45 @@ public class LoginServiceImpl implements LoginService {
         String verifyCode = VerifyCodeUtil.getVerifyCode(6);
 
         smsService.sendCode(phone,verifyCode);
-        redisTemplate.opsForValue().set(key,verifyCode,RedisConstant.ADMIN_LOGIN_CAPTCHA_TTL_SEC, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key,verifyCode,RedisConstant.APP_LOGIN_CODE_TTL_SEC, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public String login(LoginVo loginVo) {
+        //1.判断手机号码和验证码是否为空
+        if (!StringUtils.hasText(loginVo.getPhone())){
+            throw new LeaseException(ResultCodeEnum.APP_LOGIN_PHONE_EMPTY);
+        }
+        if (!StringUtils.hasText(loginVo.getCode())) {
+            throw new LeaseException(ResultCodeEnum.APP_LOGIN_CODE_EMPTY);
+        }
+        //2.校验验证码
+        String key = RedisConstant.APP_LOGIN_PREFIX + loginVo.getPhone();
+        String code = (String) redisTemplate.opsForValue().get(key);
+        if (code == null){
+            throw new LeaseException(ResultCodeEnum.APP_LOGIN_CODE_EXPIRED);
+        }
+        if (!code.equals(loginVo.getCode())) {
+            throw new LeaseException(ResultCodeEnum.APP_LOGIN_CODE_ERROR);
+        }
+        //3.判断用户是否存在,不存在则注册（创建用户）
+        LambdaQueryWrapper<UserInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserInfo::getPhone, loginVo.getPhone());
+        UserInfo userInfo = userInfoService.getOne(queryWrapper);
+        if (userInfo == null) {
+            userInfo = new UserInfo();
+            userInfo.setPhone(loginVo.getPhone());
+            userInfo.setStatus(BaseStatus.ENABLE);
+            userInfo.setNickname("用户-"+loginVo.getPhone().substring(5));
+            userInfoService.save(userInfo);
+        }
+
+        //4.判断用户是否被禁
+        if (userInfo.getStatus().equals(BaseStatus.DISABLE)) {
+            throw new LeaseException(ResultCodeEnum.APP_ACCOUNT_DISABLED_ERROR);
+        }
+
+
+        return JWTUtil.createToken(userInfo.getId(),userInfo.getPhone());
     }
 }
