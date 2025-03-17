@@ -1,6 +1,7 @@
 package com.xzc.lease.web.app.controller.room;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzc.lease.common.result.Result;
 import com.xzc.lease.web.app.service.RoomInfoService;
 import com.xzc.lease.web.app.vo.room.RoomDetailVo;
@@ -20,12 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoomController {
 
     @Autowired
-    RoomInfoService roomInfoService;
+    RoomInfoService service;
 
     @Operation(summary = "分页查询房间列表")
     @GetMapping("pageItem")
-    public Result<IPage<RoomItemVo>> pageItem(@RequestParam long curren, @RequestParam long size, RoomQueryVo roomQueryVo){
-        return Result.ok();
+    public Result<IPage<RoomItemVo>> pageItem(@RequestParam long current, @RequestParam long size, RoomQueryVo queryVo){
+        Page<RoomItemVo> page = new Page<>(current, size);
+        IPage<RoomItemVo> result = service.pageItem(page, queryVo);
+        return Result.ok(result);
     }
 
     @Operation(summary = "根据id获取房间详细信息")
