@@ -1,5 +1,6 @@
 package com.xzc.lease.web.app.controller.login;
 
+import com.xzc.lease.common.context.LoginUserContext;
 import com.xzc.lease.common.result.Result;
 import com.xzc.lease.model.entity.UserInfo;
 import com.xzc.lease.web.app.service.LoginService;
@@ -33,8 +34,9 @@ public class LoginController {
     @GetMapping("info")
     @Operation(summary = "获取登录信息")
     public Result<UserInfoVo> info(){
-
-        return Result.ok();
+        Long userId = LoginUserContext.getLoginUser().getUserId();
+        UserInfoVo userInfoVo = service.getUserInfoById(userId);
+        return Result.ok(userInfoVo);
     }
 
 }

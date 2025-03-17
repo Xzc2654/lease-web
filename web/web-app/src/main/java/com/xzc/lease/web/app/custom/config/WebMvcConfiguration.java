@@ -1,6 +1,7 @@
 package com.xzc.lease.web.app.custom.config;
 
-import com.xzc.lease.web.app.custom.interceptor.AuthenticationInterceptor;
+
+import com.xzc.lease.web.app.custom.interceptor.AuthenticationInterceptorAPP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
 
     @Autowired
-    private AuthenticationInterceptor authenticationInterceptor;
+    private AuthenticationInterceptorAPP authenticationInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

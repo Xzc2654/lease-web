@@ -9,10 +9,12 @@ import com.xzc.lease.common.utils.JWTUtil;
 import com.xzc.lease.common.utils.VerifyCodeUtil;
 import com.xzc.lease.model.entity.UserInfo;
 import com.xzc.lease.model.enums.BaseStatus;
+import com.xzc.lease.web.app.mapper.UserInfoMapper;
 import com.xzc.lease.web.app.service.LoginService;
 import com.xzc.lease.web.app.service.SmsService;
 import com.xzc.lease.web.app.service.UserInfoService;
 import com.xzc.lease.web.app.vo.user.LoginVo;
+import com.xzc.lease.web.app.vo.user.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -31,9 +33,12 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    @Autowired
+    UserInfoMapper userInfoMapper;
 
     @Autowired
     private UserInfoService userInfoService;
+
     @Override
     public void getSMSCode(String phone) {
         //1. 检查手机号码是否为空
@@ -94,4 +99,13 @@ public class LoginServiceImpl implements LoginService {
 
         return JWTUtil.createToken(userInfo.getId(),userInfo.getPhone());
     }
+
+    @Override
+    public UserInfoVo getUserInfoById(Long userId) {
+        UserInfo userInfo = userInfoMapper.selectById(userId);
+        UserInfoVo userInfoVo = new UserInfoVo(userInfo.getNickname(), userInfo.getAvatarUrl());
+        return userInfoVo;
+    }
+
+
 }

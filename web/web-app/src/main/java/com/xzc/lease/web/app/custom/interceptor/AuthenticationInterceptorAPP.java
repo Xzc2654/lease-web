@@ -8,14 +8,16 @@ import com.xzc.lease.common.utils.JWTUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Configuration
-public class AuthenticationInterceptor implements HandlerInterceptor {
+@Qualifier("APPAuthenticationInterceptor")
+public class AuthenticationInterceptorAPP implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getHeader("access_token");
+        String token = request.getHeader("access-token");
 
         if (token == null) {
             throw new LeaseException(ResultCodeEnum.APP_LOGIN_AUTH);

@@ -9,4 +9,7 @@ public interface LoginService {
     void getSMSCode(String phone);
 
     String login(LoginVo loginVo);
+
+
+    UserInfoVo getUserInfoById(Long userId);
 }
