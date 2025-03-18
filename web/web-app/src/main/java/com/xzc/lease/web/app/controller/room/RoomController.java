@@ -34,13 +34,17 @@ public class RoomController {
     @Operation(summary = "根据id获取房间详细信息")
     @GetMapping("getDetailById")
     public Result<RoomDetailVo> getDetailById(@RequestParam long id){
-        return Result.ok();
+        RoomDetailVo result = service.getDetailById(id);
+        return Result.ok(result);
     }
 
     @Operation(summary = "根据公寓id分页查询房间列表")
     @GetMapping("pageItemByApartmentId")
-    public Result<RoomDetailVo> getItemByApartmentId(@RequestParam long current,@RequestParam long size,@RequestParam long id){
-        return Result.ok();
+    public Result<IPage<RoomItemVo>> getItemByApartmentId(@RequestParam long current,@RequestParam long size,@RequestParam long id){
+        Page<RoomItemVo> page = new Page<>(current, size);
+        IPage<RoomItemVo> result = service.getItemByApartmentId(page, id);
+        return Result.ok(result);
+
     }
 
 }

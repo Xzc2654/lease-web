@@ -5,4 +5,32 @@
 <mapper namespace="com.xzc.lease.web.app.mapper.FacilityInfoMapper">
 
 
+    <select id="selectByRoomId" resultType="com.xzc.lease.model.entity.FacilityInfo">
+        select id,
+               type,
+               name,
+               icon
+        from facility_info
+        where is_deleted = 0
+        and type = 2
+        and id in (select facility_id
+                  from room_facility
+                  where is_deleted = 0
+                    and room_id = #{id})
+
+    </select>
+    <select id="selectByApartmentId" resultType="com.xzc.lease.model.entity.FacilityInfo">
+        select id,
+               type,
+               name,
+               icon
+        from facility_info
+        where is_deleted = 0
+          and type = 1
+          and id in (select facility_id
+                     from apartment_facility
+                     where is_deleted = 0
+                       and apartment_id = #{id})
+
+    </select>
 </mapper>

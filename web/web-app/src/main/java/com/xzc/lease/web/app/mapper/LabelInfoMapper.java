@@ -14,6 +14,10 @@ import java.util.List;
 public interface LabelInfoMapper extends BaseMapper<LabelInfo> {
 
 
+    List<LabelInfo> selectByApartId(Long id);
+
+    List<LabelInfo> selectByRoomId(long id);
+
 }
 
 

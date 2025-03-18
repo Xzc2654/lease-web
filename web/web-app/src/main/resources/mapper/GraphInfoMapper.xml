@@ -5,4 +5,42 @@
 <mapper namespace="com.xzc.lease.web.app.mapper.GraphInfoMapper">
 
 
+    <select id="selectByApartId" resultType="com.xzc.lease.model.entity.GraphInfo">
+
+            select
+                id,
+                name,
+                item_type,
+                item_id,
+                url
+            from graph_info
+            where is_deleted = 0
+              and item_type = 1
+              and item_id = #{id}
+
+    </select>
+    <select id="selectListByRommId" resultType="com.xzc.lease.web.app.vo.graph.GraphVo">
+        select id,
+               name,
+               item_type,
+               item_id,
+               url
+        from graph_info
+        where is_deleted = 0
+          and item_type = 2
+          and item_id = #{id}
+    </select>
+    <select id="selectListByItemTypeAndId" resultType="com.xzc.lease.web.app.vo.graph.GraphVo">
+        select
+            id,
+            name,
+            item_type,
+            item_id,
+            url
+        from graph_info
+        where is_deleted = 0
+          and item_type = 1
+          and item_id = #{id}
+    </select>
+
 </mapper>
