@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface BrowsingHistoryService extends IService<BrowsingHistory> {
 
+    IPage<HistoryItemVo> pageByUserId(Page<HistoryItemVo> historyItemVoPage, Long userId);
+
+    void saveHistory(Long userId, long id);
 }
