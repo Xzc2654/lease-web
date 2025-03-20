@@ -4,5 +4,47 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzc.lease.web.app.mapper.LeaseAgreementMapper">
 
+    <resultMap id="listAgreementItemMap" type="com.xzc.lease.web.app.vo.agreement.AgreementItemVo" autoMapping="true">
+        <collection property="roomGraphVoList" ofType="com.xzc.lease.web.app.vo.graph.GraphVo"
+                    select="selectGraphVo" column="room_id" autoMapping="true">
 
+        </collection>
+    </resultMap>
+
+    <select id="listAgreementItemByPhone" resultMap="listAgreementItemMap">
+        select la.id,
+               la.phone,
+               la.name,
+               la.identification_number,
+               la.apartment_id,
+               la.room_id,
+               la.lease_start_date,
+               la.lease_end_date,
+               la.lease_term_id,
+               la.rent,
+               la.deposit,
+               la.payment_type_id,
+               la.status lease_status,
+               la.source_type,
+               la.additional_info,
+               ai.name   apartment_name,
+               ri.room_number,
+               if(status = 2 or status = 7,true,false) is_renewable
+
+        from lease_agreement la
+                 left join apartment_info ai on la.apartment_id = ai.id and ai.is_deleted = 0
+                 left join room_info ri on la.room_id = ri.id and ri.is_deleted = 0
+
+        where la.is_deleted = 0
+          and la.phone = #{username}
+    </select>
+    <select id="selectGraphVo" resultType="com.xzc.lease.web.app.vo.graph.GraphVo">
+        select
+               name,
+               url
+        from graph_info
+        where is_deleted = 0
+          and item_type = 2
+          and item_id = #{room_id};
+    </select>
 </mapper>

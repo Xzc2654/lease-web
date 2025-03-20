@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SmsServiceImpl implements SmsService {
-    @Autowired
-    private Client client;
+//    @Autowired
+//    private Client client;
 
     @Override
     public void sendCode(String phone, String code) {
@@ -19,10 +19,10 @@ public class SmsServiceImpl implements SmsService {
         sendSmsRequest.setTemplateCode("SMS_480570002");
         sendSmsRequest.setTemplateParam("{\"code\":\"" + code + "\"}\n");
 
-        try {
-            client.sendSms(sendSmsRequest);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            client.sendSms(sendSmsRequest);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
     }
 }

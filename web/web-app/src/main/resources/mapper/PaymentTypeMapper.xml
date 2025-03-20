@@ -16,4 +16,12 @@
                      and room_id = #{id})
 
     </select>
+    <select id="selectListByRoomId" resultType="com.xzc.lease.model.entity.PaymentType">
+        select id,
+               name,
+               pay_month_count,
+               additional_info
+        from payment_type
+        where is_deleted = 0;
+    </select>
 </mapper>

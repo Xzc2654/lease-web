@@ -5,4 +5,33 @@
 <mapper namespace="com.xzc.lease.web.app.mapper.ViewAppointmentMapper">
 
 
+    <resultMap id="AppointmentItemVoMap" type="com.xzc.lease.web.app.vo.appointment.AppointmentItemVo" autoMapping="true">
+        <collection property="graphVoList" ofType="com.xzc.lease.web.app.vo.graph.GraphVo" autoMapping="true"
+                    select="selectGraphVoList" column="apartment_id">
+
+        </collection>
+    </resultMap>
+    <select id="listAppointmentItemByUserId" resultMap="AppointmentItemVoMap">
+        select va.id,
+               va.user_id,
+               va.name,
+               va.phone,
+               va.apartment_id,
+               va.appointment_time,
+               va.additional_info,
+               va.appointment_status,
+               ai.name apartment_name
+        from view_appointment va
+                 left join apartment_info ai on va.apartment_id = ai.id and ai.is_deleted = 0
+        where va.is_deleted = 0
+          and va.user_id = #{id};
+    </select>
+    <select id="selectGraphVoList" resultType="com.xzc.lease.web.app.vo.graph.GraphVo">
+        select
+               name,
+               url
+        from graph_info
+        where is_deleted = 0
+        and item_id = #{apartent_id};
+    </select>
 </mapper>

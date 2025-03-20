@@ -35,6 +35,7 @@ public class BrowsingHistoryServiceImpl extends ServiceImpl<BrowsingHistoryMappe
     }
 
     @Override
+    @Async
     public void saveHistory(Long userId, long id) {
         LambdaQueryWrapper<BrowsingHistory> historyWrapper = new LambdaQueryWrapper<>();
         historyWrapper.eq(BrowsingHistory::getUserId,userId).eq(BrowsingHistory::getRoomId,id);

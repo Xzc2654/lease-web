@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties(AliyunSMSProperties.class)
-@ConditionalOnProperty(prefix = "aliyun.sms", name = "endpoint")
+@ConditionalOnProperty(name = "aliyun.sms.endpoint")
 public class AliyunSMSConfiguration {
     @Autowired
     private AliyunSMSProperties properties;

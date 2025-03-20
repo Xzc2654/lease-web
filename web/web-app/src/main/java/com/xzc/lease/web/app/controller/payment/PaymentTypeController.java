@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,6 +25,13 @@ public class PaymentTypeController {
     @GetMapping("list")
     public Result<List<PaymentType>> list() {
         List<PaymentType> list = service.list();
+        return Result.ok(list);
+    }
+
+    @Operation(summary = "根据房间id获取可选支付方式列表")
+    @GetMapping("listByRoomId")
+    public Result<List<PaymentType>> list(@RequestParam Long id) {
+        List<PaymentType> list = service.listByRoomId(id);
         return Result.ok(list);
     }
 }

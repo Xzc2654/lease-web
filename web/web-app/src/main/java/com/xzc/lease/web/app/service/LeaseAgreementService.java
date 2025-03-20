@@ -1,6 +1,8 @@
 package com.xzc.lease.web.app.service;
 
 import com.xzc.lease.model.entity.LeaseAgreement;
+import com.xzc.lease.model.entity.LeaseTerm;
+import com.xzc.lease.model.entity.PaymentType;
 import com.xzc.lease.web.app.vo.agreement.AgreementDetailVo;
 import com.xzc.lease.web.app.vo.agreement.AgreementItemVo;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -14,4 +16,12 @@ import java.util.List;
 */
 public interface LeaseAgreementService extends IService<LeaseAgreement> {
 
+    List<AgreementItemVo> listAgreementItemByPhone(String username);
+
+    AgreementDetailVo getAgreementDetailById(Long id);
+    
+
+    List<LeaseTerm> LeaseTermlistByRoomId(Long id);
+
+    List<PaymentType> listByRoomId(Long id);
 }

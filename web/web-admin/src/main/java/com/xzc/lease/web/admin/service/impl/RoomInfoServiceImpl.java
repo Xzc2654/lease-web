@@ -109,7 +109,7 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
             ArrayList<GraphInfo> graphInfoList = new ArrayList<>();
             for (GraphVo graphVo :graphVoList){
                 GraphInfo graphInfo = new GraphInfo();
-                graphInfo.setItemType(ItemType.APARTMENT);
+                graphInfo.setItemType(ItemType.ROOM);
                 graphInfo.setItemId(roomSubmitVo.getId());
                 graphInfo.setName(graphVo.getName());
                 graphInfo.setUrl(graphVo.getUrl());

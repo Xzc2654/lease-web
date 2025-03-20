@@ -39,7 +39,7 @@
             url
         from graph_info
         where is_deleted = 0
-          and item_type = 1
+          and item_type = #{itemType}
           and item_id = #{id}
     </select>
 
